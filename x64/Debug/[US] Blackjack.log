@@ -1,0 +1,3 @@
+﻿  [US] Blackjack.cpp
+C:\Codes\ETF\Ugradbeni sistemi\[US] Blackjack\[US] Blackjack.cpp(61): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+  [US] Blackjack.vcxproj -> C:\Codes\ETF\Ugradbeni sistemi\[US] Blackjack\x64\Debug\[US] Blackjack.exe
