@@ -59,7 +59,7 @@ void Spil::popuniSpil()
 Karta Spil::vuci()
 {
 	srand(time(NULL));
-	int broj = rand() % 52 + 1;
+	int broj = rand() % 52;
 	Karta povratna = spil.at(broj);
 	spil.erase(spil.begin()+broj);
 	return povratna;
@@ -76,7 +76,7 @@ int Izracunaj(std::vector<Karta> karte)
 			vrijednost += 10;
 			kecevi++;
 		}
-		else if (karta.vrijednost == 'Q' || karta.vrijednost == 'K')
+		else if (karta.vrijednost == 'Q' || karta.vrijednost == 'K' || karta.vrijednost == 'B')
 		{
 			vrijednost += 10;
 		}
@@ -89,6 +89,11 @@ int Izracunaj(std::vector<Karta> karte)
 		}
 	}
 	return vrijednost;
+}
+
+char dajZadnju(const std::vector<Karta>& karte)
+{
+	return (karte.end() - 1)->vrijednost;
 }
 
 int main()
@@ -105,6 +110,7 @@ int main()
 		int unos = 1;
 		while (unos != 0)
 		{
+			//Igrac vuce dok ne kaze obrnuto ili predje 21
 			std::cout << "1 ukoliko zelis da vuces, 0 ukoliko ne zelis da vuces" << std::endl;
 			std::cin >> unos;
 			if (!std::cin || (unos != 1 && unos != 0))
@@ -114,43 +120,56 @@ int main()
 				std::cout << "Nemoj se igrati s unosom, fasovati ces" << std::endl;
 				continue;
 			}
+			if (unos == 0) break;
 			igraceve.push_back(Spil.vuci());
-			kasinove.push_back(Spil.vuci());
-
+			std::cout << dajZadnju(igraceve) << std::endl;
+			//Dodati metodu koja crta posljednju izvucenu kartu
 			igrac = Izracunaj(igraceve);
-			kasino = Izracunaj(kasinove);
 
 			std::cout << "Player: " << igrac << std::endl;
-			
-			
-			if (kasino > 21 && igrac < 21 || igrac == 21)
+						
+			if (igrac > 21)
 			{
-				std::cout << "Kasino: " << kasino << std::endl;
-				std::cout << "Pobijedili ste!" << std::endl;
-				break;
-			}
-				
-			else if (igrac > 21)
-			{
-				std::cout << "Kasino: " << kasino << std::endl;
 				std::cout << "Izgubili ste!" << std::endl;
 				break;
 			}
-			//Treba ubaciti i izjedncenje, kao i malo bolje isplanirati kada kasino vuce??
 		}
 		if (unos == 0)
 		{
-			std::cout << "Player: " << igrac << std::endl;
-			std::cout << "Kasino: " << kasino << std::endl;
-			if (21 - kasino > 21 - igrac)
-				std::cout << "Pobjedili ste!" << std::endl;
-			else
+			//Tek sad kasino vuce sve dok ne dobije bolje karte od igraca ili dok ne predje 21
+			kasinove.push_back(Spil.vuci());
+			std::cout << dajZadnju(kasinove) << std::endl;
+			//Dodati metodu koja crta posljednju izvucenu kartu
+			kasino = Izracunaj(kasinove);
+			//Preci u novi red i simbolizirati da kasino vuce
+			while (kasino < 21 && kasino <= igrac)
 			{
-				std::cout << "Izgubili ste!" << std::endl;
+				kasinove.push_back(Spil.vuci());
+				std::cout << dajZadnju(kasinove) << std::endl;
+				kasino = Izracunaj(kasinove);
+				std::cout << "House: " << kasino << std::endl;
 			}
 
+			if (igrac == kasino)
+			{
+				std::cout << "Nerijeseno!" << std::endl;
+				std::cout << "Player: " << igrac << std::endl;
+				std::cout << "House: " << kasino << std::endl;
+			}
+			else if (kasino > igrac && kasino <= 21)
+			{
+				std::cout << "Izgubili ste!" << std::endl;
+				std::cout << "Player: " << igrac << std::endl;
+				std::cout << "House: " << kasino << std::endl;	
+			}
+			else
+			{
+				std::cout << "Pobjedili ste!" << std::endl;
+				std::cout << "Player: " << igrac << std::endl;
+				std::cout << "House: " << kasino << std::endl;
+			}
 		}
-		std::cout << "Unesite 0 za prekid, any key za novu igru: ";
+		std::cout << std::endl << "Unesite 0 za prekid, any key za novu igru: ";
 		int ulaz;
 		std::cin >> ulaz;
 		if (ulaz == 0)
