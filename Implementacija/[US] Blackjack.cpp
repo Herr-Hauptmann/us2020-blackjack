@@ -3,9 +3,9 @@
  * ETF Sarajevo 2020g.
  */
 
-#include "mbed.h"
-#include "stm32f413h_discovery_ts.h"
-#include "stm32f413h_discovery_lcd.h"
+#include <mbed.h>
+#include <stm32f413h_discovery_ts.h>
+#include <stm32f413h_discovery_lcd.h>
 #include <vector>
 #include <ctime>
 #include <algorithm>
@@ -816,4 +816,4 @@ int main()
     while (1) {
         wait_ms(10);
     }
-}
+} 
